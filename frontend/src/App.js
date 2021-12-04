@@ -3,7 +3,6 @@ import { CookiesProvider } from "react-cookie";
 import { UserProvider } from "./UserContext";
 
 import { Login } from "./AccountPages/Login";
-import { Register } from "./AccountPages/Register";
 
 function App() {
 	return (
@@ -13,7 +12,6 @@ function App() {
 					<Routes>
 						<Route path='/' element={<Login />}></Route>
 						<Route path='/login' element={<Login />}></Route>
-						<Route path='/register' element={<Register />}></Route>
 					</Routes>
 				</BrowserRouter>
 			</CookiesProvider>

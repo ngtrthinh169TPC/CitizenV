@@ -1,6 +1,6 @@
 import axios from "axios";
 import React, { useState, useEffect, useContext } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useCookies } from "react-cookie";
 // Import contexts
 import { UserContext } from "../UserContext";
@@ -77,10 +77,7 @@ export const Login = () => {
 					<button onClick={performLogin}>Login</button>
 				</div>
 				<div>
-					<p>
-						If you don't have an account, go to{" "}
-						<Link to='/register'>Register</Link>.
-					</p>
+					<p>If you don't have an account, ask your boss lol</p>
 				</div>
 			</div>
 		</div>
