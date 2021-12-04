@@ -1,0 +1,6 @@
+> mkvirtualenv citizenv
+> workon citizenv
+> pip install django
+> django-admin startproject backend
+> npx create-react-app frontend
+\backend> django-admin startapp persons
