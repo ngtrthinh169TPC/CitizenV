@@ -3,4 +3,8 @@
 > pip install django
 > django-admin startproject backend
 > npx create-react-app frontend
+> rm -rf .git (only work with git bash/linux)
 \backend> django-admin startapp persons
+\backend> py manage.py makemigrations
+\backend> py manage.py migrate
+\backend> py manage.py createsuperuser
