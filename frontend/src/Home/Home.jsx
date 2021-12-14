@@ -2,6 +2,8 @@ import React, { useEffect } from "react";
 import { useHistory } from "react-router-dom";
 import { useCookies } from "react-cookie";
 
+import "./home.css";
+
 function Home() {
   const [token, setToken] = useCookies(["account-token"]);
   //   const { setUser } = useContext(UserContext);
@@ -11,7 +13,7 @@ function Home() {
       history.push("/");
     }
   }, [token, history]);
-  return <div>Đây là màn hình Home :v</div>;
+  return <div className="home">Đây là màn hình Home :v</div>;
 }
 
 export default Home;
