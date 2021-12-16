@@ -28,8 +28,14 @@ INSTALLED_APPS = [
     'rest_framework',
     'rest_framework.authtoken',
     'corsheaders',
+    'cities',
+    'department',
+    'districts',
+    'employees',
     'persons',
+    'profiles',
     'users',
+    'wards',
 ]
 
 MIDDLEWARE = [
