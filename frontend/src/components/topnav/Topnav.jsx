@@ -29,7 +29,7 @@ const renderNotificationItem = (item, index) => (
 const renderUserToggle = (user) => (
   <div className="topnav__right-user">
     <div className="topnav__right-user__image">
-      <img src={user.image} alt="" />
+      <i className="bx bx-user-circle"></i>
     </div>
     <div className="topnav__right-user__name">{user.display_name}</div>
   </div>

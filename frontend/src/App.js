@@ -7,6 +7,9 @@ import AppPage from "./components/AppPage";
 import RouteWithSubRoutes from "./components/RouteWithSubRoutes";
 import Home from "./Home/Home";
 import Error from "./AnotherPages/Error";
+import ManagePage from "./managepage/ManagePage";
+
+import "bootstrap/dist/css/bootstrap.min.css";
 
 function App() {
   const routes = [
@@ -23,6 +26,11 @@ function App() {
           path: "/",
           exact: true,
           component: Home,
+        },
+        {
+          path: "/accounts",
+          exact: true,
+          component: ManagePage,
         },
         {
           path: "/:somestring",

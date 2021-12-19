@@ -70,8 +70,8 @@
   margin-right: 10px;
 }
 
-.topnav__right-user__image > img {
-  width: 100%;
+.topnav__right-user__image > i {
+  font-size: 40px;
 }
 
 .topnav__right-user__name {
