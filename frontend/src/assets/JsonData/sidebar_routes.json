@@ -12,13 +12,8 @@
   },
   {
     "display_name": "Theo dõi tiến độ",
-    "route": "/products",
+    "route": "/progress",
     "icon": "bx bx-pie-chart-alt-2"
-  },
-  {
-    "display_name": "Quản lý quyền",
-    "route": "/decentralization",
-    "icon": "bx bx-check"
   },
   {
     "display_name": "Danh sách dân cư",
@@ -39,10 +34,5 @@
     "display_name": "Báo cáo tiến độ",
     "route": "/report",
     "icon": "bx bx-file"
-  },
-  {
-    "display_name": "settings",
-    "route": "/settings",
-    "icon": "bx bx-cog"
   }
 ]

@@ -8,6 +8,10 @@ import RouteWithSubRoutes from "./components/RouteWithSubRoutes";
 import Home from "./Home/Home";
 import Error from "./AnotherPages/Error";
 import ManagePage from "./managepage/ManagePage";
+import InsertInformation from "./insertinformation/InsertInformation";
+import Report from "./Report/Report";
+import ProgressPage from "./progresspage/ProgressPage";
+import PopulationList from "./populationlist/PopulationList";
 
 import "bootstrap/dist/css/bootstrap.min.css";
 
@@ -31,6 +35,26 @@ function App() {
           path: "/accounts",
           exact: true,
           component: ManagePage,
+        },
+        {
+          path: "/insert",
+          exact: true,
+          component: InsertInformation,
+        },
+        {
+          path: "/report",
+          exact: true,
+          component: Report,
+        },
+        {
+          path: "/progress",
+          exact: true,
+          component: ProgressPage,
+        },
+        {
+          path: "/residential",
+          exact: true,
+          component: PopulationList,
         },
         {
           path: "/:somestring",

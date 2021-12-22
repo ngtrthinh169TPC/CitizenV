@@ -1,6 +1,7 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { Table, Modal, Button, Form } from "react-bootstrap";
-import "./managepage.css";
+import "./managepage.scss";
+import ModalEdit from "../components/modals/ModalEdit";
 
 const ManagePage = () => {
   let arr = [
@@ -30,6 +31,7 @@ const ManagePage = () => {
     },
   ];
 
+  const [editPermistion, setEditPermistion] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const [listAcc, setListAcc] = useState(arr);
   const [createdForm, setCreatedForm] = useState({
@@ -39,7 +41,11 @@ const ManagePage = () => {
     confirmPassword: "",
     permission: false,
   });
+  const [showModalEdit, setShowModalEdit] = useState(true);
+  const preListAcc = [...listAcc];
   const [error, setError] = useState("");
+  const [dataEdit, setDataEdit] = useState([]);
+  const modal = useRef();
   const handleClose = () => setShowModal(false);
   const handleShow = () => {
     setShowModal(true);
@@ -68,22 +74,31 @@ const ManagePage = () => {
         break;
       case 5:
         setCreatedForm({ ...createdForm, permission: value });
-        console.log({ value });
         break;
       default:
         return;
     }
   };
 
+  const openPermistion = async () => {
+    if (editPermistion) {
+      return;
+    }
+    setEditPermistion(true);
+  };
+
+  const closePermistion = () => {
+    setListAcc(preListAcc);
+    setEditPermistion(false);
+  };
+
   const selectedPermistion = (item) => {
-    let arr = listAcc;
-    console.log({ arr });
+    let arr = [...listAcc];
     arr.forEach((element) => {
       if (element.id === item.id) {
         element.permission = !item.permission;
       }
     });
-    console.log({ arr });
     setListAcc(arr);
   };
 
@@ -123,12 +138,34 @@ const ManagePage = () => {
     });
   };
 
+  const handleCloseModal = () => {
+    modal.current.close();
+    setShowModalEdit(false);
+  };
+
+  const handleOpenModal = (item) => {
+    setDataEdit(item);
+    setShowModalEdit(true);
+    console.log({ dataEdit });
+    modal.current.refesh(item);
+    modal.current.open();
+  };
+
+  const handleSave = () => console.log("saved");
+
+  useEffect(() => {
+    return () => {};
+  }, [preListAcc]);
+
   return (
     <>
       <div className="manage_page">
         <div className="top-content">
           <p>Tài khoản cấp dưới đã được cấp</p>
-          <button onClick={handleShow}>Cấp mới</button>
+          <div className="top_content_btn">
+            <button onClick={openPermistion}>Chỉnh sửa</button>
+            <button onClick={handleShow}>Cấp mới</button>
+          </div>
         </div>
         <div className="content">
           {listAcc.length > 0 ? (
@@ -140,6 +177,7 @@ const ManagePage = () => {
                   <th>Id</th>
                   <th>Mật khẩu</th>
                   <th>Quyền khảo sát</th>
+                  {editPermistion ? <th>Chỉnh sửa</th> : null}
                 </tr>
               </thead>
               <tbody>
@@ -193,12 +231,22 @@ const ManagePage = () => {
                         type="checkbox"
                         // checked={item.permission}
                         value={item.permission}
-                        onClick={() => {
-                          selectedPermistion(item);
-                        }}
-                        checked={item.permission}
+                        defaultChecked={item.permission}
+                        disabled={true}
                       />
                     </td>
+                    {editPermistion ? (
+                      <td>
+                        <Button
+                          disabled={!editPermistion}
+                          onClick={() => {
+                            handleOpenModal(item);
+                          }}
+                        >
+                          <i className="bx bx-edit-alt" />
+                        </Button>
+                      </td>
+                    ) : null}
                   </tr>
                 ))}
               </tbody>
@@ -207,6 +255,16 @@ const ManagePage = () => {
             "Không có tài khoản nào được tạo"
           )}
         </div>
+        {editPermistion ? (
+          <div className="bottom_content">
+            <div className="btn">
+              <Button variant="secondary" onClick={closePermistion}>
+                Hủy
+              </Button>
+              <Button variant="primary">Lưu</Button>
+            </div>
+          </div>
+        ) : null}
       </div>
       <Modal
         show={showModal}
@@ -278,6 +336,12 @@ const ManagePage = () => {
           </Button>
         </Modal.Footer>
       </Modal>
+      <ModalEdit
+        ref={modal}
+        data={dataEdit}
+        handleClose={handleCloseModal}
+        handleSave={handleSave}
+      />
     </>
   );
 };

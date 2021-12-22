@@ -35,8 +35,12 @@ const renderUserToggle = (user) => (
   </div>
 );
 
+const Logout = () => {
+  console.log("Logout");
+};
+
 const renderUserMenu = (item, index) => (
-  <Link to="/" key={index}>
+  <Link to={item.path} key={index} onClick={Logout}>
     <div className="notification-item">
       <i className={item.icon}></i>
       <span>{item.content}</span>
