@@ -37,53 +37,63 @@ export const Login = () => {
   // 	}
   // };
 
-  const performLogin = () => {
-    console.log("form", form);
-    axios
-      .post("/api-token-auth/", form)
-      .then((response) => {
-        setToken("account-token", response.data.token);
-        setUser(response.data.user_id);
-        console.log(response.data);
+  // const performLogin = () => {
+  //   console.log("form", form);
+  //   axios
+  //     .post("https://citizenv-backend-03.herokuapp.com/api-token-auth/", form)
+  //     .then((response) => {
+  //       console.log("Login");
+  //       setToken("account-token", response.data.token);
+  //       setUser(response.data.user_id);
+  //       console.log(response.data);
+  //       history.push("/");
+  //     })
+  //     .catch(function (error) {
+  //       console.log("abcd");
+  //       console.log(error);
+  //     });
+  // };
+
+  const performLogin = async () => {
+    let data = {
+      username: form.username,
+      password: form.password,
+    };
+    try {
+      let response = await fetch(
+        "https://citizenv-backend-03.herokuapp.com/api-token-auth/",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            // "Access-Control-Allow-Origin":
+            //   "https://citizenv-backend-03.herokuapp.com",
+          },
+          body: JSON.stringify(data),
+        }
+      );
+      let resJson = await response.json();
+      if (response.status == 200) {
+        setToken("account-token", resJson.token);
+        let user = {
+          account_id: resJson.account_id,
+          permission: resJson.permission,
+          name_of_unit: resJson.name_of_unit,
+          classification: resJson.classification,
+          entry_permit: resJson.entry_permit,
+          progress: resJson.progress,
+        };
+        setUser(user);
         history.push("/");
-      })
-      .catch(function (error) {
-        console.log(error.response);
-      });
+      }
+      console.log(resJson);
+    } catch (error) {
+      console.log("abcd");
+      console.error(error);
+    }
   };
 
   return (
-    // <div>
-    // 	<div>
-    // 		<h2>Login</h2>
-    // 		<div>
-    // 			<label>Username</label>
-    // 			<input
-    // 				type='text'
-    // 				placeholder='Username'
-    // 				value={form.username}
-    // 				onChange={(event) =>
-    // 					setForm({ ...form, username: event.target.value })
-    // 				}></input>
-    // 		</div>
-    // 		<div>
-    // 			<label>Password</label>
-    // 			<input
-    // 				type='password'
-    // 				placeholder='Password'
-    // 				value={form.password}
-    // 				onChange={(event) =>
-    // 					setForm({ ...form, password: event.target.value })
-    // 				}></input>
-    // 		</div>
-    // 		<div>
-    // 			<button onClick={performLogin}>Login</button>
-    // 		</div>
-    // 		<div>
-    // 			<p>If you don't have an account, ask your boss lol</p>
-    // 		</div>
-    // 	</div>
-    // </div>
     <div id="login-container">
       <div id="login">
         <div id="title">

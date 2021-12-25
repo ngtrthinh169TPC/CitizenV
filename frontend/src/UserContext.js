@@ -5,36 +5,37 @@ import { useCookies } from "react-cookie";
 export const UserContext = createContext();
 
 export const UserProvider = ({ children }) => {
-	const [user, setUser] = useState(0);
-	const [token] = useCookies(["account-token"]);
+  const [user, setUser] = useState({});
+  const [token] = useCookies(["account-token"]);
 
-	// Utilities
-	const getConfigs = useCallback(() => {
-		return {
-			headers: {
-				authorization: `Token ${token["account-token"]}`,
-			},
-		};
-	}, [token]);
+  // Utilities
+  const getConfigs = useCallback(() => {
+    return {
+      headers: {
+        authorization: `Token ${token["account-token"]}`,
+      },
+    };
+  }, [token]);
 
-	useEffect(() => {
-		if (token["account-token"]) {
-			axios
-				.get("/whoami/", getConfigs())
-				.then((response) => {
-					setUser(response.data);
-				})
-				.catch(function (error) {
-					console.log(error.response);
-				});
-		} else {
-			setUser(0);
-		}
-	}, [token, getConfigs]);
+  useEffect(() => {
+    if (token["account-token"]) {
+      axios
+        .get("/whoami/", getConfigs())
+        .then((response) => {
+          console.log("response", response.data[0]);
+          setUser(response.data[0]);
+        })
+        .catch(function (error) {
+          console.log(error.response);
+        });
+    } else {
+      setUser({});
+    }
+  }, [token, getConfigs]);
 
-	return (
-		<UserContext.Provider value={{ user, setUser }}>
-			{children}
-		</UserContext.Provider>
-	);
+  return (
+    <UserContext.Provider value={{ user, setUser }}>
+      {children}
+    </UserContext.Provider>
+  );
 };

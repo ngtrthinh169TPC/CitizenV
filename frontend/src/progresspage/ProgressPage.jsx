@@ -1,47 +1,82 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Table } from "react-bootstrap";
+import { useCookies } from "react-cookie";
+import { useHistory } from "react-router-dom";
 import "./progresspage.scss";
 
 const ProgressPage = () => {
-  let arr = [
-    {
-      id: 1,
-      unit: "Thành phố Hà Nội",
-      progress: "18/30",
-    },
-    {
-      id: 2,
-      unit: "Thành phố Hải Phòng",
-      progress: "21/30",
-    },
-    {
-      id: 3,
-      unit: "Thành phố Đầ Nẵng",
-      progress: "25/28",
-    },
-    {
-      id: 4,
-      unit: "Thành phố Hà Hồ Chí Minh",
-      progress: "24/24",
-    },
-    {
-      id: 5,
-      unit: "Thành phố Cần Thơ",
-      progress: "17/21",
-    },
-    {
-      id: 6,
-      unit: "Tỉnh Nam Định",
-      progress: "26/29",
-    },
-  ];
+  const [listAcc, setListAcc] = useState([]);
+  const [token, setToken] = useCookies(["account-token"]);
+  const [tienDo, setTienDo] = useState({});
 
-  const [listAcc, setListAcc] = useState(arr);
+  const history = useHistory();
+
+  useEffect(() => {
+    if (!token["account-token"]) {
+      history.push("/login");
+    }
+  }, [token, history]);
+
+  const getListAcc = async () => {
+    let tokenCode = "Token " + token["account-token"];
+    try {
+      let response = await fetch(
+        "https://citizenv-backend-03.herokuapp.com/account/children/",
+        {
+          method: "GET",
+          headers: {
+            authorization: tokenCode,
+          },
+          body: null,
+        }
+      );
+
+      if (response.status == 200 || response.status == 201) {
+        let resJson = await response.json();
+        console.log({ resJson });
+        setListAcc(resJson);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const progress = async () => {
+    try {
+      let tokenCode = "Token " + token["account-token"];
+      let response = await fetch(
+        "https://citizenv-backend-03.herokuapp.com/account/children/progress/",
+        {
+          method: "GET",
+          headers: {
+            authorization: tokenCode,
+          },
+        }
+      );
+      if (response.status == 200) {
+        let resJson = await response.json();
+        setTienDo(resJson);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    getListAcc();
+    progress();
+    return () => {};
+  }, []);
 
   return (
     <div className="progress_div">
       <div className="title">
         <h3>Tiến độ khảo sát</h3>
+      </div>
+      <div className="tien_do">
+        <h5>
+          Tiến độ khảo sát: {tienDo.completed}/{tienDo.total}
+        </h5>
       </div>
       <div className="content">
         {listAcc.length > 0 ? (
@@ -50,21 +85,25 @@ const ProgressPage = () => {
               <tr>
                 <th>#</th>
                 <th>Đơn vị</th>
-                <th>Tiến độ</th>
+                <th>Trạng thái</th>
               </tr>
             </thead>
             <tbody>
               {listAcc.map((item, index) => (
                 <tr key={index}>
-                  <td>{item.id}</td>
-                  <td>{item.unit}</td>
-                  <td>{item.progress}</td>
+                  <td>{index}</td>
+                  <td>{item.classification + " " + item.name_of_unit}</td>
+                  <td>
+                    {item.completed
+                      ? "Đã hoàn thành khảo sát"
+                      : "Chưa hoàn thành khảo sát"}
+                  </td>
                 </tr>
               ))}
             </tbody>
           </Table>
         ) : (
-          "Không có tài khoản nào được tạo"
+          <div className="no_content">Không có thông tin!</div>
         )}
       </div>
     </div>

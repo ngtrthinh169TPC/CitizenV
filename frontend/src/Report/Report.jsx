@@ -1,19 +1,63 @@
-import React, { useState } from "react";
-import { Row, Form, Button, Col } from "react-bootstrap";
+import React, { useState, useEffect, useContext } from "react";
+import { Row, Form, Button, Col, Spinner } from "react-bootstrap";
+import { useHistory } from "react-router-dom";
+import { useCookies } from "react-cookie";
+import { UserContext } from "../UserContext";
 
 import "./report.scss";
 
 const Report = () => {
-  const [donvi, setDonvi] = useState("Bộ");
-  const [maxInit, setMaxInit] = useState(20);
-  const [minInit, setMinInit] = useState(0);
+  const { user } = useContext(UserContext);
   const [form, setForm] = useState({
-    initName: donvi,
-    qualtity: 0,
-    max: 20,
+    initName: user.classification + " " + user.name_of_unit,
     success: false,
     annunciator: "",
   });
+  const [token, setToken] = useCookies(["account-token"]);
+  const [success, setSuccess] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [btnName, setBtnName] = useState("Báo cáo");
+  const history = useHistory();
+
+  useEffect(() => {
+    if (!token["account-token"]) {
+      history.push("/login");
+    }
+  }, [token, history]);
+
+  const report = async () => {
+    setLoading(true);
+    let tokenCode = "Token " + token["account-token"];
+    try {
+      let data = {
+        reporter: form.annunciator,
+        completed: form.success,
+      };
+
+      let response = await fetch(
+        "https://citizenv-backend-03.herokuapp.com/report/",
+        {
+          method: "POST",
+          headers: {
+            authorization: tokenCode,
+            "Content-type": "application/json",
+          },
+          body: JSON.stringify(data),
+        }
+      );
+      if (response.status == 201) {
+        setBtnName("Báo cáo thành công!");
+        setSuccess(true);
+        setTimeout(() => {
+          setBtnName("Báo cáo");
+          setSuccess(false);
+        }, 3000);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+    setLoading(false);
+  };
 
   return (
     <div className="report">
@@ -34,23 +78,15 @@ const Report = () => {
               />
             </Form.Group>
 
-            <Form.Group as={Col} className="mb-3" id="formGridMale">
+            <Form.Group as={Col} className="mb-3 ml-6" id="formGridMale">
               <Form.Label>Tiến độ:</Form.Label>
               <Form.Check
                 type="checkbox"
                 label="Hoàn thành"
                 value={form.success}
-              />
-            </Form.Group>
-
-            <Form.Group as={Col} controlId="formGridNumber">
-              <Form.Label>Số lượng:</Form.Label>
-              <Form.Control
-                type="number"
-                placeholder="Nhập tổng số đơn vị đã hoàn thành khảo sát"
-                max={form.max}
-                min={minInit}
-                value={form.qualtity}
+                onClick={(e) => {
+                  setForm({ ...form, success: e.target.checked });
+                }}
               />
             </Form.Group>
           </Row>
@@ -61,13 +97,23 @@ const Report = () => {
               type="text"
               placeholder="Nhập tên người báo cáo"
               value={form.annunciator}
-              // disabled={true}
+              onChange={(e) => {
+                setForm({ ...form, annunciator: e.target.value });
+              }}
             />
           </Form.Group>
 
-          <Button variant="primary" type="submit">
-            Submit
-          </Button>
+          {loading ? (
+            <Spinner animation="border" />
+          ) : (
+            <Button
+              variant="primary"
+              className={success ? "btn btn-success" : ""}
+              onClick={report}
+            >
+              {btnName}
+            </Button>
+          )}
         </Form>
       </div>
     </div>

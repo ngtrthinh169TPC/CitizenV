@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from "react";
-import { Row, Form, Button, Col } from "react-bootstrap";
+import { Row, Form, Button, Col, Spinner, Modal } from "react-bootstrap";
+import { useCookies } from "react-cookie";
+import { useHistory } from "react-router-dom";
 import moment from "moment";
-
 import "./insert.scss";
 
 const InsertInformation = () => {
@@ -20,11 +21,22 @@ const InsertInformation = () => {
   });
   const [error, setError] = useState("");
   const [success, setSuccess] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [token, setToken] = useCookies(["account-token"]);
+  const [showModal, setShowModal] = useState(false);
+  const [message, setMessage] = useState("Tạo thông tin người dân thành công!");
+
+  const history = useHistory();
 
   useEffect(() => {
-    console.log({ today });
-    return () => {};
-  }, []);
+    if (!token["account-token"]) {
+      history.push("/login");
+    }
+  }, [token, history]);
+
+  const handleClose = () => {
+    setShowModal(false);
+  };
 
   const handleSelected = (event) => {
     setForm({ ...form, vanHoa: event.target.value });
@@ -69,19 +81,14 @@ const InsertInformation = () => {
     }
   };
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     setError("");
-    console.log({ form });
     if (!form.hoTen) {
       setError("Vui lòng nhập Họ tên");
       return;
     }
     if (!form.ngaySinh) {
       setError("Vui lòng nhập Ngày sinh");
-      return;
-    }
-    if (!form.cccd) {
-      setError("Vui lòng nhập số CCCD/CMND");
       return;
     }
     if (!form.queQuan) {
@@ -111,6 +118,45 @@ const InsertInformation = () => {
     }
 
     setSuccess(true);
+    setLoading(true);
+    try {
+      let tokenCode = "Token " + token["account-token"];
+      let data = {
+        citizen_id: form.cccd ? form.cccd : null,
+        full_name: form.hoTen,
+        gender: form.gioiTinh ? "Male" : "Female",
+        date_of_birth: form.ngaySinh,
+        place_of_birth: form.queQuan,
+        place_of_origin: "",
+        permanent_address: form.thuongTru,
+        temporary_address: form.tamTru,
+        religious: form.tonGiao,
+        occupation: form.ngheNghiep,
+        education: form.vanHoa,
+      };
+      console.log(data);
+      let response = await fetch(
+        "https://citizenv-backend-03.herokuapp.com/citizen/",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            authorization: tokenCode,
+          },
+          body: JSON.stringify(data),
+        }
+      );
+      console.log(response);
+      if (response.status === " 200" || response.status === "201") {
+        setShowModal(true);
+        setMessage("Tạo thông tin thành công!");
+      }
+    } catch (error) {
+      console.log(error);
+      setShowModal(true);
+      setMessage("Đã có lỗi xảy ra, vui lòng thử lại sau!");
+    }
+    setLoading(false);
   };
 
   return (
@@ -146,25 +192,27 @@ const InsertInformation = () => {
               <Form.Label>Giới tính:</Form.Label>
               <Form.Group as={Col} className="mb-3" id="formGridMale">
                 <Form.Check
-                  type="checkbox"
+                  type="radio"
                   label="Nam"
                   defaultChecked={form.gioiTinh}
                   value={form.gioiTinh}
-                  onClick={(e) =>
-                    setForm({ ...form, gioiTinh: !form.gioiTinh })
-                  }
+                  name="sex"
+                  onClick={(e) => {
+                    setForm({ ...form, gioiTinh: e.target.checked });
+                  }}
                 />
               </Form.Group>
 
               <Form.Group as={Col} className="mb-3" id="formGridFemale">
                 <Form.Check
-                  type="checkbox"
+                  type="radio"
                   label="Nữ"
+                  name="sex"
                   defaultChecked={!form.gioiTinh}
-                  value={!form.gioiTinh}
-                  onClick={(e) =>
-                    setForm({ ...form, gioiTinh: !form.gioiTinh })
-                  }
+                  value={form.gioiTinh}
+                  onClick={(e) => {
+                    setForm({ ...form, gioiTinh: !e.target.checked });
+                  }}
                 />
               </Form.Group>
             </Row>
@@ -224,9 +272,11 @@ const InsertInformation = () => {
                 onChange={handleSelected}
               >
                 <option>Chọn</option>
-                <option value="1">One</option>
-                <option value="2">Two</option>
-                <option value="3">Three</option>
+                <option value="Tiểu học">Tiểu học</option>
+                <option value="Trung học cơ sở">Trung học cơ sở</option>
+                <option value="Trung học phổ thông">Trung học phổ thông</option>
+                <option value="Cao đẳng/Đại học">Cao đẳng/Đại học</option>
+                <option value="Khác">Khác</option>
               </Form.Select>
             </Form.Group>
 
@@ -240,19 +290,42 @@ const InsertInformation = () => {
             </Form.Group>
           </Row>
 
+          <Modal
+            show={showModal}
+            onHide={handleClose}
+            backdrop="static"
+            keyboard={false}
+          >
+            <Modal.Header>
+              <Modal.Title>Thông báo</Modal.Title>
+            </Modal.Header>
+            <Modal.Body>
+              <div className="text">{message}</div>
+            </Modal.Body>
+            <Modal.Footer>
+              <Button variant="primary" onClick={() => setShowModal(false)}>
+                Xác nhận
+              </Button>
+            </Modal.Footer>
+          </Modal>
+
           {error ? (
             <Form.Group className="mb-3">
               <Form.Text className="text-danger">{error}</Form.Text>
             </Form.Group>
           ) : null}
 
-          <Button
-            variant="primary"
-            type={success ? "submit" : null}
-            onClick={handleSubmit}
-          >
-            Gửi
-          </Button>
+          {loading ? (
+            <Spinner animation="border" />
+          ) : (
+            <Button
+              variant="primary"
+              type={success ? "submit" : null}
+              onClick={handleSubmit}
+            >
+              Gửi
+            </Button>
+          )}
         </Form>
       </div>
     </div>

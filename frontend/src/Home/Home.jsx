@@ -15,9 +15,27 @@ function Home() {
   const history = useHistory();
   useEffect(() => {
     if (!token["account-token"]) {
-      history.push("/");
+      history.push("/login");
     }
   }, [token, history]);
+
+  const getDataPie = async () => {
+    let tokenCode = "Token " + token["account-token"];
+    let response = await fetch(
+      "https://citizenv-backend-03.herokuapp.com/citizen/stats/",
+      {
+        method: "GET",
+        headers: {
+          "Content-type": "application/json",
+          authorization: tokenCode,
+        },
+      }
+    );
+    if (response.status == 200) {
+      let resJson = await response.json();
+      console.log(resJson);
+    }
+  };
 
   useEffect(() => {
     setDataPie([
@@ -31,6 +49,7 @@ function Home() {
         series: [1000, 2000, 10000, 950],
       },
     ]);
+    getDataPie();
     return () => {};
   }, []);
 

@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Table, Modal, Button, Form } from "react-bootstrap";
+import { Row, Col, Modal, Button, Form, Spinner } from "react-bootstrap";
 
 export class ModalEdit extends Component {
   constructor(props) {
@@ -8,6 +8,7 @@ export class ModalEdit extends Component {
       showModal: false,
       data: this.props.data,
       error: "",
+      loading: false,
     };
   }
 
@@ -16,7 +17,7 @@ export class ModalEdit extends Component {
   };
 
   close = () => {
-    this.setState({ showModal: false });
+    this.setState({ showModal: false, loading: false });
   };
 
   refesh = (item) => {
@@ -27,19 +28,19 @@ export class ModalEdit extends Component {
     let data = this.state.data;
     switch (index) {
       case 1:
-        data.id = value;
+        data.account_id = value;
         this.setState({ data: data });
         break;
       case 2:
-        data.name = value;
+        data.name_of_unit = value;
         this.setState({ data: data });
         break;
       case 3:
-        data.password = value;
+        data.classification = value;
         this.setState({ data: data });
         break;
       case 4:
-        data.permission = value;
+        data.entry_permit = value;
         this.setState({ data: data });
         break;
       default:
@@ -61,34 +62,26 @@ export class ModalEdit extends Component {
           </Modal.Header>
           <Modal.Body>
             <Form>
-              <Form.Group className="mb-3" controlId="formBasicEmail">
-                <Form.Label>Đơn vị hành chính:</Form.Label>
-                <Form.Control
-                  type="text"
-                  placeholder="Nhập tên đơn vị muốn tạo"
-                  value={this.state.data.name}
-                  onChange={(e) => this.onChangeTextForm(e.target.value, 2)}
-                />
-              </Form.Group>
-
-              <Form.Group className="mb-3" controlId="formBasicPassword">
-                <Form.Label>ID:</Form.Label>
-                <Form.Control
-                  type="text"
-                  placeholder="Nhập ID muốn tạo"
-                  value={this.state.data.id}
-                  onChange={(e) => this.onChangeTextForm(e.target.value, 1)}
-                />
-              </Form.Group>
-              <Form.Group className="mb-3" controlId="formBasicPassword">
-                <Form.Label>Mật khẩu:</Form.Label>
-                <Form.Control
-                  type="text"
-                  placeholder="Nhập mật khẩu"
-                  value={this.state.data.password}
-                  onChange={(e) => this.onChangeTextForm(e.target.value, 3)}
-                />
-              </Form.Group>
+              <Row className="mb-3">
+                <Form.Group as={Col}>
+                  <Form.Label>Cấp bậc:</Form.Label>
+                  <Form.Control
+                    type="text"
+                    placeholder="Nhập cấp bậc của đơn vị"
+                    value={this.state.data.classification}
+                    onChange={(e) => this.onChangeTextForm(e.target.value, 3)}
+                  />
+                </Form.Group>
+                <Form.Group as={Col}>
+                  <Form.Label>Đơn vị hành chính:</Form.Label>
+                  <Form.Control
+                    type="text"
+                    placeholder="Nhập tên đơn vị "
+                    value={this.state.data.name_of_unit}
+                    onChange={(e) => this.onChangeTextForm(e.target.value, 2)}
+                  />
+                </Form.Group>
+              </Row>
               {this.state.error ? (
                 <Form.Text className="text-danger">
                   {this.state.error}
@@ -98,17 +91,27 @@ export class ModalEdit extends Component {
                 <Form.Check
                   type="checkbox"
                   label="Cấp phép khảo sát dân số"
-                  value={this.state.data.permission}
-                  onChange={(e) => this.onChangeTextForm(!e.target.value, 4)}
-                  defaultChecked={this.state.data.permission}
+                  value={this.state.data.entry_permit}
+                  onChange={(e) => this.onChangeTextForm(e.target.checked, 4)}
+                  defaultChecked={this.state.data.entry_permit}
                 />
               </Form.Group>
             </Form>
           </Modal.Body>
           <Modal.Footer>
-            <Button variant="primary" onClick={this.props.handleSave}>
-              Lưu
-            </Button>
+            {this.state.loading ? (
+              <Spinner animation="border" />
+            ) : (
+              <Button
+                variant="primary"
+                onClick={() => {
+                  this.setState({ loading: true });
+                  this.props.handleSave(this.state.data);
+                }}
+              >
+                Lưu
+              </Button>
+            )}
           </Modal.Footer>
         </Modal>
       </div>

@@ -3,36 +3,42 @@
     "display_name": "Thống kê tổng quát",
     "route": "/",
     "icon": "bx bx-category-alt",
-    "id": 0
+    "id": "A1 A2 A3 B1"
   },
   {
     "display_name": "Quản lý tài khoản",
     "route": "/accounts",
-    "icon": "bx bx-user-pin"
+    "icon": "bx bx-user-pin",
+    "id": "A1 A2 A3 B1"
   },
   {
     "display_name": "Theo dõi tiến độ",
     "route": "/progress",
-    "icon": "bx bx-pie-chart-alt-2"
+    "icon": "bx bx-pie-chart-alt-2",
+    "id": "A1 A2 A3"
   },
   {
     "display_name": "Danh sách dân cư",
     "route": "/residential",
-    "icon": "bx bx-list-ul"
+    "icon": "bx bx-list-ul",
+    "id": "A1 A2 A3 B1"
   },
   {
     "display_name": "In phiếu khảo sát",
     "route": "/print-coupons",
-    "icon": "bx bx-printer"
+    "icon": "bx bx-printer",
+    "id": "B2"
   },
   {
     "display_name": "Nhập dữ liệu",
     "route": "/insert",
-    "icon": "bx bx-rename"
+    "icon": "bx bx-rename",
+    "id": "B1 B2"
   },
   {
     "display_name": "Báo cáo tiến độ",
     "route": "/report",
-    "icon": "bx bx-file"
+    "icon": "bx bx-file",
+    "id": "B1"
   }
 ]
