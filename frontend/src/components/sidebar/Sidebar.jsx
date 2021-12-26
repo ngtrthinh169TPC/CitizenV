@@ -32,7 +32,7 @@ const Sidebar = (props) => {
     if (item.id.indexOf(permission) != -1) {
       if (
         item.display_name == "Báo cáo tiến độ" ||
-        item.display_name == "Quản lý tài khoản" ||
+        (item.display_name == "Quản lý tài khoản" && permission != "A1") ||
         item.display_name == "In phiếu khảo sát" ||
         item.display_name == "Nhập dữ liệu"
       ) {
