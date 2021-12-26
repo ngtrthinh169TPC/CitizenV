@@ -147,9 +147,21 @@ const InsertInformation = () => {
         }
       );
       console.log(response);
-      if (response.status === " 200" || response.status === "201") {
+      if (response.status == 200 || response.status == 201) {
         setShowModal(true);
         setMessage("Tạo thông tin thành công!");
+        setForm({
+          hoTen: "",
+          cccd: "",
+          gioiTinh: true,
+          ngaySinh: "",
+          queQuan: "",
+          thuongTru: "",
+          tamTru: "",
+          tonGiao: "",
+          vanHoa: null,
+          ngheNghiep: "",
+        });
       }
     } catch (error) {
       console.log(error);

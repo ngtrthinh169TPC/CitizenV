@@ -416,6 +416,7 @@ const PopulationList = () => {
     getList();
     getAncestors();
     getChildAcc();
+    console.log(dataA2);
   }, []);
 
   const closeEdit = () => {
