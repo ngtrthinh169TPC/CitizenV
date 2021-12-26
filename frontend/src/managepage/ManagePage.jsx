@@ -179,12 +179,15 @@ const ManagePage = () => {
           body: JSON.stringify(obj),
         }
       );
+      console.log(obj, tokenCode);
       console.log(responsive);
       if (responsive.status == 200 || responsive.status == 201) {
         let resJson = await responsive.json();
         console.log({ resJson });
         await getListAcc();
         setShowModal(false);
+      } else {
+        setError("Đã có lỗi xảy ra, vui lòng thử lại sau!");
       }
     } catch (error) {
       console.log(error);
@@ -259,7 +262,11 @@ const ManagePage = () => {
         }
       );
 
-      if (response.status == 204) {
+      if (
+        response.status == 204 ||
+        response.status == 201 ||
+        response.status == 200
+      ) {
         let perJson = await changePermistion(item);
         if (perJson) {
           modal.current.close();

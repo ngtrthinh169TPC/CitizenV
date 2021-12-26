@@ -197,8 +197,8 @@ const PopulationList = () => {
         console.log(resJson);
         if (resJson.A1) {
           let obj = {
-            id: resJson.A1[0],
-            title: resJson.A1[1],
+            id: resJson.A1[1],
+            title: resJson.A1[0],
             disable: true,
             list: [],
           };
@@ -206,8 +206,8 @@ const PopulationList = () => {
         }
         if (resJson.A2) {
           let obj = {
-            id: resJson.A2[0],
-            title: resJson.A2[1],
+            id: resJson.A2[1],
+            title: resJson.A2[0],
             disable: true,
             list: [],
           };
@@ -215,8 +215,8 @@ const PopulationList = () => {
         }
         if (resJson.A3) {
           let obj = {
-            id: resJson.A3[0],
-            title: resJson.A3[1],
+            id: resJson.A3[1],
+            title: resJson.A3[0],
             disable: true,
             list: [],
           };
@@ -224,8 +224,8 @@ const PopulationList = () => {
         }
         if (resJson.B1) {
           let obj = {
-            id: resJson.B1[0],
-            title: resJson.B1[1],
+            id: resJson.B1[1],
+            title: resJson.B1[0],
             disable: true,
             list: [],
           };
@@ -233,8 +233,8 @@ const PopulationList = () => {
         }
         if (resJson.B2) {
           let obj = {
-            id: resJson.B2[0],
-            title: resJson.B2[1],
+            id: resJson.B2[1],
+            title: resJson.B2[0],
             disable: true,
             list: [],
           };

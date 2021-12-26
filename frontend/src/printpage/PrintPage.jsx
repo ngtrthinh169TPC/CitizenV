@@ -28,9 +28,9 @@ export default class PrintPage extends Component {
           </object>
         </div>
         <div className="footer">
-          <Button variant="primary" onClick={this.handlePrint}>
+          {/* <Button variant="primary" onClick={this.handlePrint}>
             Print
-          </Button>
+          </Button> */}
         </div>
       </div>
     );
