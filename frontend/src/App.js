@@ -12,6 +12,7 @@ import InsertInformation from "./insertinformation/InsertInformation";
 import Report from "./Report/Report";
 import ProgressPage from "./progresspage/ProgressPage";
 import PopulationList from "./populationlist/PopulationList";
+import PrintPage from "./printpage/PrintPage";
 
 import "bootstrap/dist/css/bootstrap.min.css";
 
@@ -55,6 +56,11 @@ function App() {
           path: "/residential",
           exact: true,
           component: PopulationList,
+        },
+        {
+          path: "/print-coupons",
+          exact: true,
+          component: PrintPage,
         },
         {
           path: "/:somestring",

@@ -34,21 +34,40 @@ function Home() {
     if (response.status == 200) {
       let resJson = await response.json();
       console.log(resJson);
+      let arr = [];
+      let obj = {
+        labels: [],
+        series: [],
+      };
+      resJson.education.forEach((element) => {
+        obj.labels.push(element.education);
+        obj.series.push(element.count);
+      });
+      arr.push(obj);
+      obj = {
+        labels: [],
+        series: [],
+      };
+      resJson.gender.forEach((element) => {
+        obj.labels.push(element.gender);
+        obj.series.push(element.count);
+      });
+      arr.push(obj);
+      obj = {
+        labels: [],
+        series: [],
+      };
+      resJson.religious.forEach((element) => {
+        obj.labels.push(element.religious);
+        obj.series.push(element.count);
+      });
+      arr.push(obj);
+      console.log(arr);
+      setDataPie(arr);
     }
   };
 
   useEffect(() => {
-    setDataPie([
-      { labels: ["Nam", "Nữ"], series: [13400, 14100] },
-      {
-        labels: ["Phổ thông", "Cao đẳng/Đại học", "Khác"],
-        series: [9000, 1000, 48300],
-      },
-      {
-        labels: ["Thiên chúa giáo", "Phật giáo", "Không tôn giáo", "Khác"],
-        series: [1000, 2000, 10000, 950],
-      },
-    ]);
     getDataPie();
     return () => {};
   }, []);

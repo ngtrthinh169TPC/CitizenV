@@ -27,7 +27,7 @@
     "display_name": "In phiếu khảo sát",
     "route": "/print-coupons",
     "icon": "bx bx-printer",
-    "id": "B2"
+    "id": "B1"
   },
   {
     "display_name": "Nhập dữ liệu",
