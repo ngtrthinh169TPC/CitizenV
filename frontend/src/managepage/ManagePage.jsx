@@ -166,6 +166,7 @@ const ManagePage = () => {
       entry_permit: createdForm.permission,
     };
     setLoading(true);
+    let tokenCode = "Token " + token["account-token"];
     try {
       let responsive = await fetch(
         "https://citizenv-backend-03.herokuapp.com/user/",
@@ -173,10 +174,12 @@ const ManagePage = () => {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
+            authorization: tokenCode,
           },
           body: JSON.stringify(obj),
         }
       );
+      console.log(responsive);
       if (responsive.status == 200 || responsive.status == 201) {
         let resJson = await responsive.json();
         console.log({ resJson });
