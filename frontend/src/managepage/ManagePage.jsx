@@ -138,7 +138,7 @@ const ManagePage = () => {
       return;
     }
 
-    if (createdForm.id.length > 2) {
+    if (createdForm.id.length != 2) {
       setError("ID chỉ gồm 2 chữ số!");
     }
     if (!createdForm.username) {
