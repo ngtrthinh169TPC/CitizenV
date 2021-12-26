@@ -12,7 +12,7 @@
   }
   #login {
     width: 28vw;
-    height: 50vh;
+    min-height: 60vh;
     flex-direction: column;
     border: #4b95d9 solid 10px;
     border-radius: 2%;
@@ -50,6 +50,16 @@
         color: #fff;
         background-color: #4b95d9;
         margin: 20px 0;
+        display: flex;
+        flex-direction: row;
+        justify-content: space-evenly;
+        align-items: center;
+      }
+
+      h5 {
+        font-size: 12px;
+        color: red;
+        text-align: justify;
       }
     }
     #footer {

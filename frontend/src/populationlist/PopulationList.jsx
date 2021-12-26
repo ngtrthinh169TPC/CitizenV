@@ -143,13 +143,13 @@ const PopulationList = () => {
                         <td>{item.gender == "Male" ? "Nam" : "Nữ"}</td>
                         <td>{item.citizen_id}</td>
                         <td>{item.permanent_address}</td>
+                        <td>
+                          <Button onClick={() => openModal(item)}>
+                            <i className="bx bx-show" />
+                          </Button>
+                        </td>
                         {user.permission == "B1" || user.permission == "B2" ? (
                           <>
-                            <td>
-                              <Button onClick={() => openModal(item)}>
-                                <i className="bx bx-show" />
-                              </Button>
-                            </td>
                             <td>
                               <div className="edit">
                                 <Button onClick={() => openEditModal(item)}>

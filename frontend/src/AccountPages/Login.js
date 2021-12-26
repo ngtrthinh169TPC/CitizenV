@@ -1,5 +1,6 @@
 import axios from "axios";
 import React, { useState, useEffect, useContext } from "react";
+import { Spinner, Button } from "react-bootstrap";
 import { useHistory } from "react-router-dom";
 import { useCookies } from "react-cookie";
 // Import contexts
@@ -14,6 +15,8 @@ export const Login = () => {
   const [token, setToken] = useCookies(["account-token"]);
   const { setUser } = useContext(UserContext);
   const history = useHistory();
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
 
   useEffect(() => {
     if (token["account-token"]) {
@@ -21,40 +24,9 @@ export const Login = () => {
     }
   }, [token, history]);
 
-  // useEffect(() => {
-  // 	window.addEventListener("keypress", handleKeyDown);
-  // 	return () => {
-  // 		window.removeEventListener("keypress", handleKeyDown);
-  // 	};
-  // });
-
-  // const handleKeyDown = (event) => {
-  // 	// if ENTER pressed
-  // 	if (event.keyCode === 13) {
-  // 		if (form.username !== "" && form.password !== "") {
-  // 			performLogin();
-  // 		}
-  // 	}
-  // };
-
-  // const performLogin = () => {
-  //   console.log("form", form);
-  //   axios
-  //     .post("https://citizenv-backend-03.herokuapp.com/api-token-auth/", form)
-  //     .then((response) => {
-  //       console.log("Login");
-  //       setToken("account-token", response.data.token);
-  //       setUser(response.data.user_id);
-  //       console.log(response.data);
-  //       history.push("/");
-  //     })
-  //     .catch(function (error) {
-  //       console.log("abcd");
-  //       console.log(error);
-  //     });
-  // };
-
   const performLogin = async () => {
+    setLoading(true);
+    setError("");
     let data = {
       username: form.username,
       password: form.password,
@@ -66,8 +38,6 @@ export const Login = () => {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
-            // "Access-Control-Allow-Origin":
-            //   "https://citizenv-backend-03.herokuapp.com",
           },
           body: JSON.stringify(data),
         }
@@ -85,12 +55,15 @@ export const Login = () => {
         };
         setUser(user);
         history.push("/");
+      } else {
+        setError("Thông tin tài khoản hoặc mật khẩu không chính xác!");
       }
       console.log(resJson);
     } catch (error) {
       console.log("abcd");
       console.error(error);
     }
+    setLoading(false);
   };
 
   return (
@@ -120,9 +93,10 @@ export const Login = () => {
               setForm({ ...form, password: event.target.value })
             }
           />
-
+          {error ? <h5>{error}</h5> : null}
           <button id="login-btn" onClick={performLogin}>
             Đăng nhập
+            {loading ? <Spinner animation="border" /> : null}
           </button>
         </div>
         <div id="footer">
